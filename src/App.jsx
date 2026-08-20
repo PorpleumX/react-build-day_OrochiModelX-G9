@@ -23,8 +23,9 @@ function RandomFood() {
     const detailData = await detailResponse.json();
 
     setFood(detailData.meals[0]);
+    console.log(detailData)
   };
-
+  
   return (
     <div>
       <button
