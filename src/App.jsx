@@ -1,7 +1,6 @@
 import CategorySelector from "./components/CategorySelector";
 
 const App = () => {
-
   return (
     <div>
       <CategorySelector />
