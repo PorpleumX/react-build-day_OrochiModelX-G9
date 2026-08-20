@@ -1,49 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Exercises } from "../Data/mockdataExercises";
-import { getRandomThaiFood } from "../Data/apidataFood";
 
-const Randomizer = ({ category }) => {
+const Randomizer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
 
-  // เคลียร์ผลลัพธ์เก่าทิ้งทุกครั้งที่เปลี่ยน Category จากด้านบน
-  useEffect(() => {
-    setResult(null);
-  }, [category]);
-
-  const handleRandomClick = async () => {
+  const handleRandomClick = () => {
     setIsLoading(true);
     setResult(null);
 
-    if (category === "Food") {
-      const foodData = await getRandomThaiFood();
-      if (foodData) {
-        setResult({
-          name: foodData.strMeal,
-          description: `หมวดหมู่: ${foodData.strCategory} | พื้นเพ: ${foodData.strArea}`,
-          image: <img src={foodData.strMealThumb} alt="Food" className="w-24 h-24 object-cover rounded-full mx-auto shadow-md" />
-        });
-      } else {
-        setResult({ name: "ดึงข้อมูลผิดพลาด", description: "ลองใหม่อีกครั้ง", image: "❌" });
-      }
-      setIsLoading(false);
-    } else {
-      setTimeout(() => {
-        const randomIndex = Math.floor(Math.random() * Exercises.length);
-        const randomExercise = Exercises[randomIndex];
+    // หมวดออกกำลังกาย
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * Exercises.length);
+      const randomExercise = Exercises[randomIndex];
 
-        setResult({
-          name: randomExercise.name,
-          description: randomExercise.description,
-          image: <span className="text-6xl">🏃</span> 
-        });
-        setIsLoading(false);
-      }, 800);
-    }
+      setResult({
+        name: randomExercise.name,
+        description: randomExercise.description,
+        image: <span className="text-6xl">🏃</span> 
+      });
+      setIsLoading(false);
+    }, 800);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-lg max-w-md mx-auto border border-gray-100">
+    <div className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-lg max-w-md mx-auto border border-gray-100 w-full">
       
       <h2 className="text-2xl font-bold text-gray-800 mb-6">วันนี้เอาอะไรดี?</h2>
 
@@ -76,12 +57,10 @@ const Randomizer = ({ category }) => {
         className={`w-full py-3 px-6 rounded-lg text-white font-bold text-lg transition-all duration-300 transform ${
           isLoading 
             ? "bg-gray-400 cursor-not-allowed" 
-            : category === "Food"
-              ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:-translate-y-1 hover:shadow-lg"
-              : "bg-gradient-to-r from-green-500 to-emerald-600 hover:-translate-y-1 hover:shadow-lg"
+            : "bg-gradient-to-r from-green-500 to-emerald-600 hover:-translate-y-1 hover:shadow-lg"
         }`}
       >
-        {isLoading ? "กำลังประมวลผล..." : `สุ่มหมวด${category === "Food" ? "อาหาร" : "ออกกำลังกาย"}!`}
+        {isLoading ? "กำลังประมวลผล..." : "สุ่มหมวดออกกำลังกาย!"}
       </button>
 
     </div>
