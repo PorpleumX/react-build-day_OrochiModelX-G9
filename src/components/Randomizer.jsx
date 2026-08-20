@@ -17,7 +17,7 @@ const Randomizer = () => {
       setResult({
         name: randomExercise.name,
         description: randomExercise.description,
-        image: <span className="text-6xl">🏃</span> 
+        image: randomExercise.image, 
       });
       setIsLoading(false);
     }, 800);
@@ -38,7 +38,7 @@ const Randomizer = () => {
           </div>
         ) : result ? (
           <div className="text-center animate-fade-in-up">
-            <div className="mb-3">{result.image}</div>
+            <div className="mb-3 text-6xl">{result.image}</div>
             <h3 className="text-xl font-bold text-gray-800">{result.name}</h3>
             <p className="text-sm text-gray-600 mt-2">{result.description}</p>
           </div>

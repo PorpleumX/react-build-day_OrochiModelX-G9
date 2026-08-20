@@ -9,11 +9,11 @@ const CategorySelector = ({ selectedCategory, onSelectCategory }) => {
           onClick={() => onSelectCategory(cat)}
           className={`px-6 py-2 rounded-lg font-bold text-lg transition-all duration-300 ${
             selectedCategory === cat 
-              ? "bg-white text-blue-600 shadow-md transform scale-105" 
-              : "text-gray-500 hover:bg-gray-200"
+              ? "bg-red-500 text-blue-600 shadow-md transform scale-105" 
+              : "text-black bg-blue-500 hover:bg-gray-200"
           }`}
         >
-          {cat === "Food" ? "🍛 อาหาร" : "💪 ออกกำลังกาย"}
+          {cat === "Food" ? "🍛 กินข้าว" : "💪 ออกกำลังกาย"}
         </button>
       ))}
     </div>
