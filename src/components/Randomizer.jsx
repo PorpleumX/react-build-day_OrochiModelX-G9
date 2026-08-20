@@ -1,42 +1,73 @@
 import { useState } from "react";
 import { Exercises } from "../Data/mockdataExercises";
+import { getRandomThaiFood } from "../Data/apidataFood";
 
 const Randomizer = () => {
-  // TODO: ในอนาคตเมื่อคนที่ 1 ทำ Context เสร็จ ให้เปลี่ยนมาใช้ State จาก Context แทน
-  // เช่น const { isLoading, result, randomize } = useAppContext();
+  // TODO: ในอนาคตเมื่อคนที่ 1 ทำ Context เสร็จ ให้เปลี่ยนมาดึง State จาก Context แทน
+  // เช่น const { isLoading, result, category, randomize } = useAppContext();
   
   // จำลอง State ขึ้นมาใช้ชั่วคราว
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [tempCategory, setTempCategory] = useState("Food"); // จำลอง Category ที่เลือก
 
-  // ฟังก์ชันจำลองการสุ่มข้อมูล
-  const handleRandomClick = () => {
+  // ฟังก์ชันสุ่มข้อมูล
+  const handleRandomClick = async () => {
     setIsLoading(true); // เริ่มแสดงสถานะกำลังโหลด
     setResult(null); // เคลียร์ผลลัพธ์เก่าทิ้ง
 
-    // จำลองเวลาดึงข้อมูล 1.5 วินาที
-    setTimeout(() => {
-      setIsLoading(false); // ปิดสถานะกำลังโหลด
-      
-      // สุ่มข้อมูลจาก mockdataExercises
-      const randomIndex = Math.floor(Math.random() * Exercises.length);
-      const randomExercise = Exercises[randomIndex];
+    if (tempCategory === "Food") {
+      // สุ่มอาหารผ่าน API (ของจริง)
+      const foodData = await getRandomThaiFood();
+      if (foodData) {
+        setResult({
+          name: foodData.strMeal,
+          description: `หมวดหมู่: ${foodData.strCategory} | พื้นเพ: ${foodData.strArea}`,
+          image: <img src={foodData.strMealThumb} alt="Food" className="w-24 h-24 object-cover rounded-full mx-auto shadow-md" />
+        });
+      } else {
+        setResult({ name: "ดึงข้อมูลผิดพลาด", description: "ลองใหม่อีกครั้ง", image: "❌" });
+      }
+      setIsLoading(false);
+    } else {
+      // หมวดออกกำลังกาย (จำลองเวลาโหลดนิดหน่อยให้สมจริง)
+      setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * Exercises.length);
+        const randomExercise = Exercises[randomIndex];
 
-      setResult({
-        name: randomExercise.name,
-        description: randomExercise.description,
-        image: "🏃" // ใส่ Emoji พื้นฐานให้
-      });
-    }, 1500);
+        setResult({
+          name: randomExercise.name,
+          description: randomExercise.description,
+          image: <span className="text-6xl">🏃</span> 
+        });
+        setIsLoading(false);
+      }, 800);
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-lg max-w-md mx-auto mt-8 border border-gray-100">
       
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">วันนี้ออกกำลังกายท่าไหนดี?</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">วันนี้เอาอะไรดี?</h2>
+
+      {/* ปุ่มสลับโหมดชั่วคราว (เพื่อทดสอบ Component ของเรา) */}
+      <div className="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
+        <button 
+          onClick={() => { setTempCategory("Food"); setResult(null); }}
+          className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${tempCategory === "Food" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:bg-gray-200"}`}
+        >
+          🍛 อาหาร
+        </button>
+        <button 
+          onClick={() => { setTempCategory("Exercise"); setResult(null); }}
+          className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${tempCategory === "Exercise" ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:bg-gray-200"}`}
+        >
+          💪 ออกกำลังกาย
+        </button>
+      </div>
 
       {/* พื้นที่แสดงผลลัพธ์ (Conditional Render) */}
-      <div className="min-h-[150px] w-full flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 mb-6 p-4">
+      <div className="min-h-[160px] w-full flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 mb-6 p-4">
         
         {isLoading ? (
           // เงื่อนไขที่ 1: กำลังโหลด (สุ่มอยู่)
@@ -47,8 +78,8 @@ const Randomizer = () => {
         ) : result ? (
           // เงื่อนไขที่ 2: สุ่มเสร็จแล้ว และมีผลลัพธ์
           <div className="text-center animate-fade-in-up">
-            <div className="text-6xl mb-3">{result.image}</div>
-            <h3 className="text-xl font-bold text-blue-600">{result.name}</h3>
+            <div className="mb-3">{result.image}</div>
+            <h3 className="text-xl font-bold text-gray-800">{result.name}</h3>
             <p className="text-sm text-gray-600 mt-2">{result.description}</p>
           </div>
         ) : (
@@ -67,10 +98,12 @@ const Randomizer = () => {
         className={`w-full py-3 px-6 rounded-lg text-white font-bold text-lg transition-all duration-300 transform ${
           isLoading 
             ? "bg-gray-400 cursor-not-allowed" 
-            : "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:-translate-y-1 hover:shadow-lg active:translate-y-0"
+            : tempCategory === "Food"
+              ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:-translate-y-1 hover:shadow-lg"
+              : "bg-gradient-to-r from-green-500 to-emerald-600 hover:-translate-y-1 hover:shadow-lg"
         }`}
       >
-        {isLoading ? "กำลังประมวลผล..." : "สุ่มเลย!"}
+        {isLoading ? "กำลังประมวลผล..." : `สุ่มหมวด${tempCategory === "Food" ? "อาหาร" : "ออกกำลังกาย"}!`}
       </button>
 
     </div>
