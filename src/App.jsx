@@ -1,8 +1,9 @@
 import React from 'react'
+import CategorySelector from './components/CategorySelector';
 
 const App = () => {
   return (
-    <div>App</div>
+    <CategorySelector />
   )
 }
 
