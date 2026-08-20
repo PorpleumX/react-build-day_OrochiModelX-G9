@@ -1,11 +1,9 @@
-import CategorySelector from "./components/CategorySelector";
+import React from 'react'
 
 const App = () => {
   return (
-    <div>
-      <CategorySelector />
-    </div>
-  );
-};
+    <div>App</div>
+  )
+}
 
-export default App;
+export default App
