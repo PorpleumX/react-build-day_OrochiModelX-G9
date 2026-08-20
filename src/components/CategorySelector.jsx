@@ -1,4 +1,40 @@
-const CategorySelector = ({ selectedCategory, categories, handleCategory,filteredCards }) => {
+import { useState } from "react";
+const CategorySelector = () => {
+  const [selectedCategory, setSelectedCategory] = useState("Food");
+
+  const categories = ["Food", "Exercise"];
+
+  const cardsData = [
+    {
+      id: 1,
+      title: "ก๋วยเตี๋ยวเรือ",
+      category: "Food",
+      desc: "แคลอรี่ 350 kcal",
+    },
+    { id: 2, title: "ข้าวมันไก่", category: "Food", desc: "แคลอรี่ 590 kcal" },
+    {
+      id: 3,
+      title: "วิ่งสวนสาธารณะ",
+      category: "Exercise",
+      desc: "เบิร์น 300 kcal",
+    },
+    {
+      id: 4,
+      title: "เวทเทรนนิ่ง",
+      category: "Exercise",
+      desc: "เบิร์น 200 kcal",
+    },
+  ];
+
+  const handleCategory = (cate) => {
+    setSelectedCategory(cate);
+    console.log(cate);
+  };
+
+  const filteredCards = cardsData.filter(
+    (item) => item.category === selectedCategory,
+  );
+
   return (
     <>
       <div className="flex gap-2">
@@ -8,8 +44,8 @@ const CategorySelector = ({ selectedCategory, categories, handleCategory,filtere
               onClick={() => handleCategory(item)}
               className={`px-4 py-2 rounded transition-colors ${
                 selectedCategory === item
-                  ? "bg-amber-400 text-white font-bold" // Style ตอนถูกเลือก
-                  : "bg-white text-gray-700 hover:bg-amber-100" // Style ปกติ
+                  ? "bg-amber-400 text-white font-bold"
+                  : "bg-white text-gray-700 hover:bg-amber-100"
               }`}
             >
               {item}
