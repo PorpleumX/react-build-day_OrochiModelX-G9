@@ -1,27 +1,55 @@
-import React from 'react'
-import Data  from './Data/apidataFood'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-function Food() {
-  const [foods, setFoods] = useState([]);}
+function RandomFood() {
+  const [food, setFood] = useState(null);
 
- useEffect(() => {
-    const getFood = async () => {
-      const response = await fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=");
-      const data = await response.json();
+  const getRandomFood = async () => {
+    // เอารายการอาหารไทย
+    const response = await fetch(
+      "https://www.themealdb.com/api/json/v1/1/filter.php?a=Thai"
+    );
 
-      setFoods(data);
-    };
-     getFood();
-  }, []);
+    const data = await response.json();
 
- return (
+    // สุ่ม 1 เมนู
+    const randomIndex = Math.floor(Math.random() * data.meals.length);
+    const randomMeal = data.meals[randomIndex];
+
+    // เอา ID ไปขอรายละเอียด
+    const detailResponse = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${randomMeal.idMeal}`
+    );
+
+    const detailData = await detailResponse.json();
+
+    setFood(detailData.meals[0]);
+  };
+
+  return (
     <div>
-      {foods.map(food => (
-        <p key={food.id}>{food.name}</p>
-      ))}
+      <button
+        className="border-2 bg-red-400 text-amber-500"
+        onClick={getRandomFood}
+      >
+        Random Food
+      </button>
+
+      {food && (
+        <div>
+          <h2>{food.strMeal}</h2>
+
+          <img
+            src={food.strMealThumb}
+            alt={food.strMeal}
+            width="300"
+          />
+
+          <p>Category: {food.strCategory}</p>
+          <p>Area: {food.strArea}</p>
+        </div>
+      )}
     </div>
   );
+}
 
-
-export default App
+export default RandomFood;
