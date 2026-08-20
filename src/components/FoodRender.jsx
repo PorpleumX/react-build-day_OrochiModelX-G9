@@ -11,7 +11,7 @@ export default function FoodRender() {
     };
 
     return (
-        <div className="flex-1 flex flex-col items-center justify-center bg-slate-900 gap-10">
+        <div className="flex-1 flex flex-col items-center justify-center bg-slate-900 gap-10 p-10">
 
             {food && (
                 <div className="text-center text-white flex flex-col items-center">
