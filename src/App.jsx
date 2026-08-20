@@ -1,12 +1,8 @@
-import React from "react";
-import FoodRender from "./components/FoodRender";
-import TextRender from "./components/TextRender";
+import React from 'react'
 
 const App = () => {
   return (
-    <>
-      <div className='flex bg-amber-400 min-w-full'>App</div>
-    </>
+    <div>App</div>
   )
 }
 
