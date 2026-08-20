@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Exercises } from "../Data/mockdataExercises";
 
 const Randomizer = () => {
   // TODO: ในอนาคตเมื่อคนที่ 1 ทำ Context เสร็จ ให้เปลี่ยนมาใช้ State จาก Context แทน
@@ -16,11 +17,15 @@ const Randomizer = () => {
     // จำลองเวลาดึงข้อมูล 1.5 วินาที
     setTimeout(() => {
       setIsLoading(false); // ปิดสถานะกำลังโหลด
-      // จำลองผลลัพธ์ที่ได้จากการสุ่ม (หมวดออกกำลังกาย)
+      
+      // สุ่มข้อมูลจาก mockdataExercises
+      const randomIndex = Math.floor(Math.random() * Exercises.length);
+      const randomExercise = Exercises[randomIndex];
+
       setResult({
-        name: "วิดพื้น (Push-ups)",
-        description: "บริหารหน้าอก แขน และแกนกลางลำตัว จัดไป 3 เซ็ต!",
-        image: "💪"
+        name: randomExercise.name,
+        description: randomExercise.description,
+        image: "🏃" // ใส่ Emoji พื้นฐานให้
       });
     }, 1500);
   };
