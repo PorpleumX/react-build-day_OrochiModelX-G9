@@ -9,6 +9,9 @@ const App = () => {
 
     return (
         <div className="flex flex-col items-center p-8 bg-white w-full min-h-screen gap-8">
+            <p className="text-2xl font-bold">
+                วันนี้ฉันจะทำอะไร... 
+            </p>
             <CategorySelector
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
